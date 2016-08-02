@@ -1,5 +1,56 @@
-Changelog for Bolt
-==================
+Changelog for Bolt 3.x
+======================
+
+Bolt 3.2-dev
+-----------
+
+- Added: Add support for separate entity attribute, versus db column names. [#5608](https://github.com/bolt/bolt/pull/5608)
+
+Bolt 3.1-dev
+-----------
+
+- Fixed: Disabling news feed in backend [#5544](https://github.com/bolt/bolt/pull/5544)
+- Fixed: Display of "last seen" user date/time [#5547](https://github.com/bolt/bolt/pull/5547)
+- Added: Automatic Translation Inclusion for Extensions [#5292](https://github.com/bolt/bolt/pull/5292)
+- Added: Allow extra plugin for Ckeditor [#5342](https://github.com/bolt/bolt/pull/5342)
+- Added: Setting Extensions Composer options [#5571](https://github.com/bolt/bolt/pull/5571)
+- Added: Nut command to enable, disable, and list details for a user [#5483](https://github.com/bolt/bolt/pull/5483)
+- Added: Add --enable option to Nut user:create [#5483](https://github.com/bolt/bolt/pull/5483)
+
+Bolt 3.0.x
+-----------
+
+ - Fixed: Remove the Foreign Key Constraint properties from diffs when supportsForeignKeyConstraints() is false [#5550](https://github.com/bolt/bolt/pull/5550)
+ - Fixed: Be very select about extension autoloader error/exception emitting [#5565](https://github.com/bolt/bolt/pull/5565)
+ - Added: Create custom exception for invalid repo, and throw this when accessed [#5568](https://github.com/bolt/bolt/pull/5568)
+ - Fixed: Add support for missing `skip_uses` parameter [#5609](https://github.com/bolt/bolt/pull/56095609)
+
+Bolt 3.0.11
+-----------
+
+Released 2016-07-19. Notable changes:
+
+ - Update: [SECURITY] Updated bundled [Guzzle to 5.3.1](https://github.com/guzzle/guzzle/releases/tag/6.2.1) that mitigates [Httpoxy](https://httpoxy.org/) (CVE-2016-5385)
+ - Update: [SECURITY] Updated [Composer to 1.2.0](https://github.com/composer/composer/releases/tag/1.2.0), which mitigates [Httpoxy](https://httpoxy.org/) (CVE-2016-5385)
+ - Added: Add Google Maps API key option [#5505](https://github.com/bolt/bolt/pull/5505)
+ - Fixed: Enforce relative schema on Twig `{{ url() }}` calls [#5497](https://github.com/bolt/bolt/pull/5497)
+ - Fixed: Ability to disable the news feed [#5544](https://github.com/bolt/bolt/pull/5544)
+ - Fixed: Enable use of repeaters inside Templatefields [#5542](https://github.com/bolt/bolt/pull/5542)
+
+Bolt 3.0.10
+-----------
+
+Released 2016-07-14. Notable changes:
+
+ - Added: Allow callables to be registered as repository classes [#5523](https://github.com/bolt/bolt/pull/5523)
+ - Change: Improve logic of hydration events on create [#5521](https://github.com/bolt/bolt/pull/5521)
+ - Change: Refactor the hydration event to use an ArrayObject [#5518](https://github.com/bolt/bolt/pull/5518)
+ - Fixed: Cant open readme from extension on WINDOWS [#5501](https://github.com/bolt/bolt/pull/5501)
+ - Fixed: Check isallowed on new page buttons [#5529](https://github.com/bolt/bolt/pull/5529)
+ - Fixed: Ensure the id is unique in repeater fields [#5526](https://github.com/bolt/bolt/pull/5526)
+ - Fixed: Fix comment on default image sizing [#5528](https://github.com/bolt/bolt/pull/5528)
+ - Fixed: Tokenise PHP version string to remove `-extra` on Debian [#5524](https://github.com/bolt/bolt/pull/5524)
+ - Update: Updating dependencies for base-2016. [#5520](https://github.com/bolt/bolt/pull/5520)
 
 Bolt 3.0.9
 ----------

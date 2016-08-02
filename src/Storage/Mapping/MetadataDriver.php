@@ -2,6 +2,7 @@
 namespace Bolt\Storage\Mapping;
 
 use Bolt\Exception\StorageException;
+use Bolt\Storage\CaseTransformTrait;
 use Bolt\Storage\Database\Schema\Manager;
 use Bolt\Storage\Mapping\ClassMetadata as BoltClassMetadata;
 use Bolt\Storage\NamingStrategy;
@@ -19,6 +20,8 @@ use Doctrine\DBAL\Schema\Table;
  */
 class MetadataDriver implements MappingDriver
 {
+    use CaseTransformTrait;
+
     /** @var \Bolt\Storage\Database\Schema\Manager */
     protected $schemaManager;
     /** @var array */
@@ -160,6 +163,7 @@ class MetadataDriver implements MappingDriver
         foreach ($table->getColumns() as $colName => $column) {
             $mapping = [
                 'fieldname'        => $column->getName(),
+                'attribute'        => $this->camelize($column->getName()),
                 'type'             => $column->getType()->getName(),
                 'fieldtype'        => $this->getFieldTypeFor($table->getOption('alias'), $column),
                 'length'           => $column->getLength(),
@@ -185,7 +189,7 @@ class MetadataDriver implements MappingDriver
             $this->setIncomingRelations($contentKey, $className);
             $this->setTaxonomies($contentKey, $className, $table);
             $this->setTemplatefields($contentKey, $className, $table);
-            $this->setRepeaters($contentKey, $className, $table);
+            $this->setRepeaters($contentKey, $className);
         }
 
         foreach ($this->getAliases() as $alias => $table) {
@@ -195,15 +199,24 @@ class MetadataDriver implements MappingDriver
         }
     }
 
-    public function setRepeaters($contentKey, $className, $table)
+    public function setRepeaters($contentKey, $className, $inputData = null)
     {
-        if (!isset($this->contenttypes[$contentKey])) {
+        $standalone = false;
+
+        if ($inputData === null && !isset($this->contenttypes[$contentKey])) {
             return;
         }
 
-        foreach ($this->contenttypes[$contentKey]['fields'] as $key => $data) {
+        if ($inputData === null) {
+            $inputData = $this->contenttypes[$contentKey]['fields'];
+        } else {
+            $standalone = true;
+        }
+
+        foreach ($inputData as $key => $data) {
             $mapping = [
                 'fieldname'        => $key,
+                'attribute'        => $this->camelize($key),
                 'type'             => 'null',
                 'fieldtype'        => $this->typemap['repeater'],
                 'tables'           => [
@@ -227,10 +240,29 @@ class MetadataDriver implements MappingDriver
                     }
                 }
 
+                if ($standalone) {
+                    return $data;
+                }
+
                 $this->metadata[$className]['fields'][$key] = $mapping;
                 $this->metadata[$className]['fields'][$key]['data'] = $data;
             }
         }
+    }
+
+
+    /**
+     * This is a helper method to get a correct mapping from an array config. It's designed to take raw array config
+     * to generate a correct format mapping for repeaters.
+     * @param array $config
+     * @return array
+     */
+    public function getRepeaterMapping(array $config)
+    {
+        $mapping = ['data' => null];
+        $mapping['data'] = $this->setRepeaters(null, null, $config);
+
+        return $mapping;
     }
 
     /**
@@ -254,10 +286,10 @@ class MetadataDriver implements MappingDriver
 
             $mapping = [
                 'fieldname' => $relationKey,
-                'type'      => 'null',
+                'type' => 'null',
                 'fieldtype' => $this->typemap['relation'],
-                'entity'    => $this->resolveClassName($relationKey),
-                'target'    => $this->schemaManager->getTableName('relations'),
+                'entity' => $this->resolveClassName($relationKey),
+                'target' => $this->schemaManager->getTableName('relations'),
             ];
 
             $this->metadata[$className]['fields'][$relationKey] = $mapping;
